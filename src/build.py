@@ -6,6 +6,8 @@ from pdf2image import convert_from_path
 from PIL import Image
 from PyPDF2 import PdfReader, PdfWriter
 import pytesseract
+import csv
+
 
 def rotate(file):
     pdf_in = open(file, "rb")
@@ -22,6 +24,7 @@ def rotate(file):
     pdf_in.close()
     return f"{tempdir}certificados.pdf"
 
+
 def build(file, folder):
 
     # Rotate the file.
@@ -30,7 +33,7 @@ def build(file, folder):
     # Get pdf pages read as images.
     pdf_pages = convert_from_path(Path(rotated_pdf))
 
-    #Check if folder certificados exists.
+    # Check if folder certificados exists.
     MYDIR = (folder)
     CHECK_FOLDER = os.path.isdir(MYDIR)
 
@@ -38,6 +41,7 @@ def build(file, folder):
     if not CHECK_FOLDER:
         os.makedirs(MYDIR)
 
+    nits = []
 
     for page_enumeration, page in enumerate(pdf_pages, start=1):
         # Create a temporary directory to store generated image from page, as we do not need this file at the end of the execution.
@@ -46,14 +50,24 @@ def build(file, folder):
             # Save page as image.
             page.save(filename, "JPEG")
             # Read image and execute ocr to get text.
-            text = str(((pytesseract.image_to_string(Image.open(f"{tempdir}/temp_page.jpg")))))
+            text = str(
+                ((pytesseract.image_to_string(Image.open(f"{tempdir}/temp_page.jpg")))))
             text = text.replace("-\n", "")
             # Get nit using regular expressions.
-            match = re.search(r"Retuvo a.{1,}\n{1,2}Identificacion\D+([0-9]{1,})", text)
+            match = re.search(
+                r"Retuvo a.{1,}\n{1,2}Identificacion\D+([0-9]{1,})", text)
             # If a matching group exists, retrieve the corresponding information from the group. If no group exists, name the page with 'unknown' and the page number.
-            if(match): nit = match.group(1)
-            else: 
+            if (match):
+                nit = match.group(1)
+                nits.append([nit])
+            else:
                 nit = f"unknow_{page_enumeration}"
                 print(text)
             # Save page using nit as name
             page.save(f"{folder}/{nit}.pdf", "PDF")
+    # saving nits to csv file
+    with open(f"{folder}/list.csv", "w", newline="") as csvfile:
+        writer = csv.writer(csvfile)
+        writer.writerows(nits)
+        csvfile.close()
+
