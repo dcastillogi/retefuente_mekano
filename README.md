@@ -1,6 +1,6 @@
 # Retefuente Certificate Splitter
 
-Read a PDF containing all retefuente certificates of the year exported by the Mekano ERP accountability software. Separate the pages of the file and name each page with the NIT of the company for which the certificate was issued.
+Read a PDF containing all retefuente certificates of the year exported by the Mekano ERP accountability software. Separate the pages of the file and name each page with the NIT of the company for which the certificate was issued. Additionally, the script generates a list of all company NITs.
 
 Since the PDF pages do not have readable text, we are using OCR (optical character recognition) to extract the text.
 
