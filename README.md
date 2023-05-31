@@ -19,5 +19,3 @@ Since the PDF pages do not have readable text, we are using OCR (optical charact
 - Once the script has finished running, go to the `./certificados` folder to find the extracted pages and `list.csv` with all the NIT numbers (unknown not included). Check all the pages to ensure that they have been named correctly. Be sure to pay special attention to any pages that are named "unknown", as this may indicate that the script was not able to identify the NIT for those pages.
 
 > Recommendation: Install modules using `python -m pip install <module>`. For more information: <https://realpython.com/lessons/why-cant-python-find-my-modules/>
-
-[!["Buy Me A Coffee"](https://www.buymeacoffee.com/assets/img/custom_images/orange_img.png)](https://www.buymeacoffee.com/danielcgiraldo)
